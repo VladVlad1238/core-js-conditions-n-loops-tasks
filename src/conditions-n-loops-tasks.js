@@ -447,8 +447,29 @@ function sortByAsc(arr) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  let resString = str;
+  let copyIterations = iterations;
+
+  while (copyIterations > 0) {
+    let evenChar = '';
+    let oddChar = '';
+
+    for (let i = 0; i < str.length; i += 1) {
+      if (i % 2 === 0) {
+        evenChar += resString[i];
+      } else {
+        oddChar += resString[i];
+      }
+    }
+    resString = evenChar + oddChar;
+    copyIterations -= 1;
+
+    if (resString === str) {
+      copyIterations = iterations % (iterations - copyIterations);
+    }
+  }
+  return resString;
 }
 
 /**
@@ -468,8 +489,28 @@ function shuffleChar(/* str, iterations */) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(number) {
+  const arrOfNums = Array.from(String(number));
+  let startIndex = arrOfNums.length - 1;
+  let leftIndex = arrOfNums.length - 1;
+
+  while (startIndex > 0 && arrOfNums[startIndex - 1] >= arrOfNums[startIndex]) {
+    startIndex -= 1;
+  }
+
+  if (startIndex === 0) return number;
+
+  while (arrOfNums[leftIndex] <= arrOfNums[startIndex - 1]) {
+    leftIndex -= 1;
+  }
+
+  const temp = arrOfNums[leftIndex];
+  arrOfNums[leftIndex] = arrOfNums[startIndex - 1];
+  arrOfNums[startIndex - 1] = temp;
+  const leftPart = arrOfNums.splice(startIndex).sort();
+  const maxNum = arrOfNums.join('') + leftPart.join('');
+
+  return Number(maxNum);
 }
 
 module.exports = {
